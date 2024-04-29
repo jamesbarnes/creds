@@ -2,6 +2,8 @@ import { getServerSession, type NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
+import { auth, currentUser } from "@clerk/nextjs/server";
+
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -63,16 +65,48 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export function getSession() {
-  return getServerSession(authOptions) as Promise<{
+// export function getSession() {
+//   return getServerSession(authOptions) as Promise<{
+//     user: {
+//       id: string;
+//       name: string;
+//       username: string;
+//       email: string;
+//       image: string;
+//     };
+//   } | null>;
+// }
+
+// New Clerk code
+export async function getSession(): Promise<any> {
+  // console.log('auth()');
+  // console.log(auth());
+  const user = await currentUser();
+  // console.log('user');
+  // console.log(user);
+  // console.log(user?.primaryEmailAddress);
+  // console.log(user?.primaryEmailAddress.emailAddress);
+
+  const newUser = {
     user: {
-      id: string;
-      name: string;
-      username: string;
-      email: string;
-      image: string;
-    };
-  } | null>;
+    id: user?.id,
+    name: `${user?.firstName} ${user?.lastName}`,
+    username: user?.username,
+    email: user?.primaryEmailAddress.emailAddress,
+    image: user?.imageUrl,
+    },
+  };
+
+  console.log('newUser');
+  console.log(newUser);
+
+  console.log('getServerSession(authOptions)');
+  // const sessionStuff = await getServerSession(authOptions);
+  console.log(await getServerSession(authOptions));
+
+  return newUser;
+
+  // return newUser;
 }
 
 export function withSiteAuth(action: any) {

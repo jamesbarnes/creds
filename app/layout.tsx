@@ -2,13 +2,14 @@ import "@/styles/globals.css";
 import { cal, inter } from "@/styles/fonts";
 import { Analytics } from "@vercel/analytics/react";
 import { Providers } from "./providers";
+import { ClerkProvider } from '@clerk/nextjs'
 import { Metadata } from "next";
 import { cn } from "@/lib/utils";
 
 const title =
-  "Platforms Starter Kit – The all-in-one starter kit for building multi-tenant applications.";
+  "Creds";
 const description =
-  "The Platforms Starter Kit is a full-stack Next.js app with multi-tenancy and custom domain support. Built with Next.js App Router, Vercel Postgres and the Vercel Domains API.";
+  "Creds description";
 const image = "https://vercel.pub/thumbnail.png";
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <body className={cn(cal.variable, inter.variable)}>
         <Providers>
@@ -44,5 +46,10 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
+    </ClerkProvider>
   );
 }
+
+
+
+

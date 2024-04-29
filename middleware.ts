@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import {
+  auth,
+  clerkMiddleware,
+  createRouteMatcher,
+  redirectToSignIn,
+} from '@clerk/nextjs/server';
+// import createMiddleware from 'next-intl/middleware';
 
 export const config = {
   matcher: [
@@ -14,14 +21,36 @@ export const config = {
   ],
 };
 
-export default async function middleware(req: NextRequest) {
+
+// export const config = {
+//   matcher: [
+//     '/((?!.*\\..*|_next).*)', // Don't run middleware on static files
+//     '/', // Run middleware on index page
+//     '/(api|trpc)(.*)'], // Run middleware on API routes
+// };
+
+
+const isProtectedRoute = createRouteMatcher([
+  "/:path*",
+  "/login/:path*",
+  "/post/:path*",
+  "/settings/:path*",
+  "/site/:path*",
+  "/sites/:path*",
+]);
+
+async function intlMiddleware(req: NextRequest) {
+  console.log("middleware");
+  console.log("url: ", req.nextUrl);
   const url = req.nextUrl;
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
+  console.log("host: ", req.headers.get("host"));
   let hostname = req.headers
     .get("host")!
     .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
-
+console.log("hostname: ", hostname);
+console.log("process.env.NEXT_PUBLIC_ROOT_DOMAIN: ", process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   // special case for Vercel preview deployment URLs
   if (
     hostname.includes("---") &&
@@ -39,13 +68,17 @@ export default async function middleware(req: NextRequest) {
   }`;
 
   // rewrites for app pages
+  
   if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    const session = await getToken({ req });
-    if (!session && path !== "/login") {
-      return NextResponse.redirect(new URL("/login", req.url));
-    } else if (session && path == "/login") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
+    // console.log("hostname: ", hostname);
+    // console.log("app page");
+    // const session = await getToken({ req });
+    // const session = await auth();
+    // if (!session && path !== "/login") {
+    //   return NextResponse.redirect(new URL("/login", req.url));
+    // } else if (session && path == "/login") {
+    //   return NextResponse.redirect(new URL("/", req.ur`l));
+    // }
     return NextResponse.rewrite(
       new URL(`/app${path === "/" ? "" : path}`, req.url),
     );
@@ -71,3 +104,12 @@ export default async function middleware(req: NextRequest) {
   // rewrite everything else to `/[domain]/[slug] dynamic route
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 }
+
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) auth().protect();
+ 
+  return intlMiddleware(req);
+});
+
+

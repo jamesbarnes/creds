@@ -2,7 +2,8 @@
 
 import LoadingDots from "@/components/icons/loading-dots";
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
+import { useSession } from "@clerk/clerk-react";
 import { useParams, useRouter } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
