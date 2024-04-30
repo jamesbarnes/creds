@@ -99,30 +99,28 @@ export async function getSession(): Promise<any> {
 
   console.log('newUser');
   console.log(newUser);
-
-  const prismaUser = await prisma.user.findUnique({
-    where: {
-      id: newUser.user.id,
-    },
-  });
-  if (!prismaUser) {
-    await prisma.user.create({
-      data: {
+  if (newUser.user.id !== undefined) {
+    console.log('newUser.user.id');
+    console.log(newUser.user.id);
+    console.log(Boolean(newUser.user.id === undefined));
+    const prismaUser = await prisma.user.findUnique({
+      where: {
         id: newUser.user.id,
-        name: newUser.user.name,
-        username: newUser.user.username,
-        email: newUser.user.email,
-        image: newUser.user.image,
       },
     });
+    if (!prismaUser) {
+      await prisma.user.create({
+        data: {
+          id: newUser.user.id,
+          name: newUser.user.name,
+          username: newUser.user.username,
+          email: newUser.user.email,
+          image: newUser.user.image,
+        },
+      });
+    }
   }
-
-
-  console.log('getServerSession(authOptions)');
-  // const sessionStuff = await getServerSession(authOptions);
-  console.log(await getServerSession(authOptions));
-
-  return newUser;
+  return user;
 
   // return newUser;
 }

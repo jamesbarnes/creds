@@ -11,7 +11,7 @@ export default async function SitePosts({
 }) {
   const session = await getSession();
   if (!session) {
-    redirect("/login");
+    // redirect("/login");
   }
   const data = await prisma.site.findUnique({
     where: {

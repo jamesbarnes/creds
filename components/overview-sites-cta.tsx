@@ -5,13 +5,13 @@ import CreateSiteModal from "./modal/create-site";
 import Link from "next/link";
 
 export default async function OverviewSitesCTA() {
-  const session = await getSession();
-  if (!session) {
+  const user = await getSession();
+  if (!user) {
     return 0;
   }
   const sites = await prisma.site.count({
     where: {
-      userId: session.user.id as string,
+      userId: user.id as string,
     },
   });
 

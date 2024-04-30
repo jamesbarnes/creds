@@ -6,7 +6,7 @@ import Editor from "@/components/editor";
 export default async function PostPage({ params }: { params: { id: string } }) {
   const session = await getSession();
   if (!session) {
-    redirect("/login");
+    // // redirect("/login");
   }
   const data = await prisma.post.findUnique({
     where: {

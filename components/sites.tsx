@@ -5,14 +5,14 @@ import SiteCard from "./site-card";
 import Image from "next/image";
 
 export default async function Sites({ limit }: { limit?: number }) {
-  const session = await getSession();
-  if (!session) {
-    redirect("/login");
+  const user = await getSession();
+  if (!user) {
+    // redirect("/login");
   }
   const sites = await prisma.site.findMany({
     where: {
       user: {
-        id: session.user.id as string,
+        id: user.id as string,
       },
     },
     orderBy: {

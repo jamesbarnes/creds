@@ -32,7 +32,7 @@ export const config = {
 
 const isProtectedRoute = createRouteMatcher([
   "/app/:path*",
-  "/login/:path*",
+  "/login",
   "/post/:path*",
   "/settings/:path*",
   "/site/:path*",

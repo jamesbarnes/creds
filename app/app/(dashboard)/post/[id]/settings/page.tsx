@@ -12,7 +12,7 @@ export default async function PostSettings({
 }) {
   const session = await getSession();
   if (!session) {
-    redirect("/login");
+    // redirect("/login");
   }
   const data = await prisma.post.findUnique({
     where: {
