@@ -31,12 +31,12 @@ export const config = {
 
 
 const isProtectedRoute = createRouteMatcher([
-  "/:path*",
+  "/app/:path*",
   "/login/:path*",
   "/post/:path*",
   "/settings/:path*",
   "/site/:path*",
-  "/sites/:path*",
+  
 ]);
 
 async function intlMiddleware(req: NextRequest) {
