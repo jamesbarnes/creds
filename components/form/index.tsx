@@ -34,7 +34,9 @@ export default function Form({
 }) {
   const { id } = useParams() as { id?: string };
   const router = useRouter();
-  const { update } = useSession();
+  const { session } = useSession();
+  console.log('update');
+  console.log(session);
   return (
     <form
       action={async (data: FormData) => {
@@ -54,7 +56,7 @@ export default function Form({
             if (id) {
               router.refresh();
             } else {
-              await update();
+              await session.touch();
               router.refresh();
             }
             toast.success(`Successfully updated ${inputAttrs.name}!`);
