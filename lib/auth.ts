@@ -81,41 +81,39 @@ export const authOptions: NextAuthOptions = {
 export async function getSession(): Promise<any> {
   // console.log('auth()');
   // console.log(auth());
-  const user = await currentUser();
+  const newUser = await currentUser();
   // console.log('user');
   // console.log(user);
   // console.log(user?.primaryEmailAddress);
   // console.log(user?.primaryEmailAddress.emailAddress);
 
-  const newUser = {
+  const user = {
     user: {
-    id: user?.id,
-    name: `${user?.firstName} ${user?.lastName}`,
-    username: user?.username,
-    email: user?.primaryEmailAddress.emailAddress,
-    image: user?.imageUrl,
+    id: newUser?.id,
+    name: `${newUser?.firstName} ${newUser?.lastName}`,
+    username: newUser?.username,
+    email: newUser?.primaryEmailAddress.emailAddress,
+    image: newUser?.imageUrl,
     },
   };
 
   console.log('newUser');
   console.log(newUser);
-  if (newUser.user.id !== undefined) {
-    console.log('newUser.user.id');
-    console.log(newUser.user.id);
-    console.log(Boolean(newUser.user.id === undefined));
+  if (user.user.id !== undefined) {
+    
     const prismaUser = await prisma.user.findUnique({
       where: {
-        id: newUser.user.id,
+        id: user.user.id,
       },
     });
     if (!prismaUser) {
       await prisma.user.create({
         data: {
-          id: newUser.user.id,
-          name: newUser.user.name,
-          username: newUser.user.username,
-          email: newUser.user.email,
-          image: newUser.user.image,
+          id: user.user.id,
+          name: user.user.name,
+          username: user.user.username,
+          email: user.user.email,
+          image: user.user.image,
         },
       });
     }

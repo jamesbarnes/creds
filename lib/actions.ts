@@ -23,6 +23,10 @@ const nanoid = customAlphabet(
 
 export const createSite = async (formData: FormData) => {
   const session = await getSession();
+  console.log('session');
+  console.log(session);
+  console.log ('session.user.id');
+  console.log(session.user.id);
   if (!session?.user.id) {
     return {
       error: "Not authenticated",
