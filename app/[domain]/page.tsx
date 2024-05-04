@@ -39,6 +39,8 @@ export default async function SiteHomePage({
   params: { domain: string };
 }) {
   const domain = decodeURIComponent(params.domain);
+  console.log('SiteHomePage');
+  console.log('SiteHomePage domain:', domain);
   const [data, posts] = await Promise.all([
     getSiteData(domain),
     getPostsForSite(domain),

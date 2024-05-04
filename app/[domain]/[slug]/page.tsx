@@ -6,13 +6,14 @@ import BlurImage from "@/components/blur-image";
 import MDX from "@/components/mdx";
 import { placeholderBlurhash, toDateString } from "@/lib/utils";
 
-export const dynamic = "force-static";
-
+// metadata?
 export async function generateMetadata({
   params,
 }: {
   params: { domain: string; slug: string };
 }) {
+  console.log('generateMetadata');
+  console.log('generateMetadata params:', params);
   const domain = decodeURIComponent(params.domain);
   const slug = decodeURIComponent(params.slug);
 
@@ -49,6 +50,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
+  console.log('generateStaticParams');
   const allPosts = await prisma.post.findMany({
     select: {
       slug: true,
@@ -88,6 +90,10 @@ export default async function SitePostPage({
 }: {
   params: { domain: string; slug: string };
 }) {
+  console.log('SitePostPage');
+  console.log('SitePostPage params:', params);
+
+  
   const domain = decodeURIComponent(params.domain);
   const slug = decodeURIComponent(params.slug);
   const data = await getPostData(domain, slug);

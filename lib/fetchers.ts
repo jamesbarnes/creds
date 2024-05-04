@@ -2,11 +2,25 @@ import { unstable_cache } from "next/cache";
 import prisma from "@/lib/prisma";
 import { serialize } from "next-mdx-remote/serialize";
 import { replaceExamples, replaceTweets } from "@/lib/remark-plugins";
+import { ChatCompletionResponseMessageRoleEnum } from "openai-edge";
+import { get } from "http";
 
-export async function getSiteData(domain: string) {
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+async function getSubdomain(domain: string) {
+  return domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
     ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
     : null;
+}
+
+
+
+export async function getSiteData(domain: string) {
+  // console.log('trace:');
+  // console.trace();
+  console.log('getSiteData');
+  console.log(`getSiteData domain: ${domain}`);
+  console.log(`getSiteData process.env.NEXT_PUBLIC_ROOT_DOMAIN: ${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+  
+  const subdomain = await getSubdomain(domain);
 
   return await unstable_cache(
     async () => {
@@ -24,9 +38,7 @@ export async function getSiteData(domain: string) {
 }
 
 export async function getPostsForSite(domain: string) {
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
-    : null;
+  const subdomain = await getSubdomain(domain);
 
   return await unstable_cache(
     async () => {
@@ -59,9 +71,10 @@ export async function getPostsForSite(domain: string) {
 }
 
 export async function getPostData(domain: string, slug: string) {
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
-    : null;
+  const subdomain = await getSubdomain(domain);
+  console.log('getPostData');
+  console.log(`getPostData domain: ${domain}`);
+  console.log(`getPostData slug: ${slug}`);
 
   return await unstable_cache(
     async () => {

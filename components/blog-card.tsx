@@ -4,6 +4,8 @@ import BlurImage from "./blur-image";
 import type { Post } from "@prisma/client";
 import { placeholderBlurhash, toDateString } from "@/lib/utils";
 
+export const dynamic = "force-static";
+
 interface BlogCardProps {
   data: Pick<
     Post,

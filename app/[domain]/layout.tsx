@@ -14,6 +14,9 @@ export async function generateMetadata({
   params: { domain: string };
 }): Promise<Metadata | null> {
   const domain = decodeURIComponent(params.domain);
+  console.log('generateMetadata');
+  console.log('generateMetadata domain:', domain);
+  console.log('generateMetadata params:', params);
   const data = await getSiteData(domain);
   if (!data) {
     return null;
@@ -66,6 +69,8 @@ export default async function SiteLayout({
   params: { domain: string };
   children: ReactNode;
 }) {
+  console.log('SiteLayout');
+  console.log('SiteLayout params:', params);
   const domain = decodeURIComponent(params.domain);
   const data = await getSiteData(domain);
 
