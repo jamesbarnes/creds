@@ -24,6 +24,11 @@ export default function SiteSettingsNav() {
       href: `/site/${id}/settings/appearance`,
       segment: "appearance",
     },
+    {
+      name: "Colors",
+      href: `/site/${id}/settings/colors`,
+      segment: "colors",
+    },
   ];
 
   return (

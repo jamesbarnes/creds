@@ -260,6 +260,77 @@ export const createPost = withSiteAuth(async (_: FormData, site: Site) => {
   return response;
 });
 
+
+// export const updateBackground = withSiteAuth(async ( background: string , site: Site) => {
+//   const session = await getSession();
+//   if (!session?.user.id) {
+//     return {
+//       error: "Not authenticated",
+//     };
+//   }
+//   const response = await prisma.site.update({
+//     data: {
+//       siteId: site.id,
+//       userId: session.user.id,
+//     },
+//   });
+
+
+//   export const updateBackground = withSiteAuth(async ( background: string , site: Site) => {
+//   const session = await getSession();
+//   console.log('updateBackground')
+//   if (!session?.user.id) {
+//     return {
+//       error: "Not authenticated",
+//     };
+//   }
+//   const response = await prisma.site.update({
+//     data: {
+//       siteId: site.id,
+//       userId: session.user.id,
+//     },
+//   });
+
+//   await revalidateTag(
+//     `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`,
+//   );
+//   site.customDomain && (await revalidateTag(`${site.customDomain}-posts`));
+
+//   return response;
+// });
+
+
+
+export const updateBackground = withSiteAuth(async ( formData: FormData, site: Site, key: any) => {
+  const session = await getSession();
+  const background = formData.get(key) as string;
+  console.log('updateBackground')
+
+  if (!session?.user.id) {
+    return {
+      error: "Not authenticated",
+    };
+  }
+  console.log(site)
+  const response = await prisma.site.update({
+    where: {
+      id: site.id,
+    },
+    data: {
+      background: background,
+    },
+  });
+
+  await revalidateTag(
+    `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`,
+  );
+  site.customDomain && (await revalidateTag(`${site.customDomain}-posts`));
+
+  return response;
+});
+
+
+
 // creating a separate function for this because we're not using FormData
 export const updatePost = async (data: Post) => {
   const session = await getSession();
@@ -321,7 +392,7 @@ export const updatePostMetadata = withPostAuth(
     },
     key: string,
   ) => {
-    const value = formData.get(key) as string;
+    const value = formData.get("key") as string;
 
     try {
       let response;
