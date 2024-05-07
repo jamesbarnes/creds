@@ -52,7 +52,7 @@ export default async function SiteHomePage({
 
   return (
     <>
-      <div className="mb-20 w-full" style={{backgroundColor: data.background}}>
+      <div className="mb-20 w-full" style={{ backgroundColor: data.background }}>
         
         {posts.length > 0 ? (
           <div className="mx-auto w-full max-w-screen-xl md:mb-28 lg:w-5/6">
