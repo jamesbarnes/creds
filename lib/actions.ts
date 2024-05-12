@@ -322,9 +322,9 @@ export const updateBackground = withSiteAuth(async ( formData: FormData, site: S
   });
 
   await revalidateTag(
-    `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`,
+    `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
   );
-  site.customDomain && (await revalidateTag(`${site.customDomain}-posts`));
+  site.customDomain && (await revalidateTag(`${site.customDomain}`));
 
   return response;
 });
